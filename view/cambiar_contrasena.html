@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambiar Contraseña</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="mt-4">Cambiar Contraseña</h2>
+        <form id="changePasswordForm" class="mb-4">
+            <div class="form-group">
+                <label for="new_password">Nueva Contraseña</label>
+                <input type="password" id="new_password" name="new_password" class="form-control"
+                    placeholder="Nueva Contraseña" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirmar Nueva Contraseña</label>
+                <input type="password" id="confirm_password" name="confirm_password" class="form-control"
+                    placeholder="Confirmar Contraseña" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Actualizar Contraseña</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#changePasswordForm').on('submit', function (e) {
+                e.preventDefault();
+                const newPassword = $('#new_password').val();
+                const confirmPassword = $('#confirm_password').val();
+
+                if (newPassword !== confirmPassword) {
+                    alert('Las contraseñas no coinciden.');
+                    return;
+                }
+
+                const username = localStorage.getItem('usernameForPasswordReset');
+
+                $.ajax({
+                    url: '../actualizar_contrasena.php',
+                    type: 'POST',
+                    data: { nombre_usuario: username, nueva_contrasena: newPassword },
+                    success: function (response) {
+                        alert(response);
+                        if (response === 'success') {
+                            window.location.href = 'login.html';
+                        } else {
+                            alert('Error al actualizar la contraseña. Intenta de nuevo.');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

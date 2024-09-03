@@ -1,19 +1,35 @@
 $(document).ready(function () {
     $('#loginForm').on('submit', function (e) {
         e.preventDefault();
+
+        $('#messageModalLabel').text('Iniciando sesión');
+        $('#messageModalBody').text('Por favor, espera mientras verificamos tus credenciales...');
+        $('#messageModal').modal('show');
+
         $.ajax({
             url: '../login.php',
             type: 'POST',
             data: $(this).serialize(),
             success: function (response) {
                 if (response === 'success') {
-                    window.location.href = 'crud.html'; // Redirige a la vista CRUD
+                    $('#messageModalLabel').text('Inicio de sesión exitoso');
+                    $('#messageModalBody').text('Redirigiendo a la vista CRUD...');
+                    localStorage.setItem('loggedIn', 'true');
+                    setTimeout(function () {
+                        window.location.href = 'crud.html';
+                    }, 2000);
                 } else {
-                    alert('Credenciales incorrectas');
+                    $('#messageModalLabel').text('Credenciales incorrectas');
+                    $('#messageModalBody').text('El nombre de usuario o la contraseña no son correctos.');
                 }
+            },
+            error: function () {
+                $('#messageModalLabel').text('Error');
+                $('#messageModalBody').text('Hubo un problema con la solicitud. Intenta de nuevo más tarde.');
             }
         });
     });
+
 
     // Cargar usuarios
     function loadUsers() {
@@ -53,8 +69,6 @@ $(document).ready(function () {
             data: { id: id },
             dataType: 'json',
             success: function (user) {
-                console.log('Datos del usuario recibidos:', user);
-
                 if (user.error) {
                     alert(user.error);
                 } else {
@@ -64,13 +78,10 @@ $(document).ready(function () {
                 }
             },
             error: function (xhr, status, error) {
-                console.log('Error en la solicitud:', error);
                 alert('Error al cargar los datos del usuario: ' + error);
             }
         });
     };
-
-
 
     $('#userForm').on('submit', function (e) {
         e.preventDefault();
@@ -79,14 +90,43 @@ $(document).ready(function () {
             type: 'POST',
             data: $(this).serialize(),
             success: function (response) {
-                alert(response);
+                $('#messageModalLabel').text('Resultado');
+                $('#messageModalBody').text(response);
+                $('#messageModal').modal('show');
+
                 loadUsers();
                 $('#userForm')[0].reset();
             }
         });
     });
 
-    // Actualizar usuario
+    $('#forgotUserForm').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: '../recuperar_contrasena.php',
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function (response) {
+                console.log(response);
+                const user = JSON.parse(response);
+
+                if (user && !user.error) {
+                    console.log(user.username);
+                    localStorage.setItem('usernameForPasswordReset', user.username);
+                    window.location.href = 'cambiar_contrasena.html';
+                } else {
+                    alert(user.error || 'Credenciales incorrectas.');
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log('Error en la solicitud AJAX:', error);
+                alert('Hubo un problema con la solicitud.');
+            }
+        });
+
+    });
+
+
     $('#editUserForm').on('submit', function (e) {
         e.preventDefault();
         $.ajax({
@@ -95,7 +135,7 @@ $(document).ready(function () {
             data: $(this).serialize(),
             success: function (response) {
                 alert(response);
-                window.location.href = 'crud.html'; // Redirige de vuelta a la vista de CRUD
+                window.location.href = 'crud.html';
             }
         });
     });

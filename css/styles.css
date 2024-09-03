@@ -70,3 +70,8 @@ h2 {
         width: 100%;
     }
 }
+
+.forgot_pass{
+    padding: 20px;
+    border: 10px solid #ddd;
+}
