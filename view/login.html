@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="../js/scripts.js"></script>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row no-gutters">
+            <div class="col-md-6 d-flex align-items-center justify-content-center left-background">
+            </div>
+
+            <div class="col-md-6 d-flex align-items-center justify-content-center right-background">
+                <div id="login-container">
+                    <div class="d-flex align-items-center justify-content-center mb-4">
+                        <img src="../Elementos Sitio iStrategy/LOGO-iSTRATEGY-.png" class="img-icon" alt="Logo">
+                    </div>
+                    <h2 class="text-center">INICIAR SESION</h2>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="nombre_usuario">Nombre de Usuario</label>
+                            <input type="text" id="nombre_usuario" name="nombre_usuario" class="form-control"
+                                placeholder="Nombre de Usuario" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contrasena">Contraseña</label>
+                            <input type="password" id="contrasena" name="contrasena" class="form-control"
+                                placeholder="Contraseña" required>
+                        </div>
+                        <button type="submit" class="btn btn-danger btn-block">Iniciar Sesión</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

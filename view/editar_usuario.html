@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Usuario</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../js/scripts.js"></script>
+</head>
+
+<body>
+    <div id="edit-container">
+        <h2>Editar Usuario</h2>
+        <form id="editUserForm">
+            <input type="hidden" id="edit_id" name="id">
+            <input type="text" id="edit_nombre_usuario" name="nombre_usuario" placeholder="Nombre de Usuario" required>
+            <input type="password" id="edit_contrasena" name="contrasena" placeholder="Contraseña" required>
+            <button type="submit">Actualizar Usuario</button>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            const user = JSON.parse(localStorage.getItem('userToEdit'));
+
+            if (user) {
+                $('#edit_id').val(user.id);
+                $('#edit_nombre_usuario').val(user.username);
+                $('#edit_contrasena').val(user.password);
+
+                localStorage.removeItem('userToEdit');
+            } else {
+                alert('No se encontraron datos del usuario');
+            }
+        });
+    </script>
+</body>
+
+</html>
