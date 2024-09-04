@@ -4,49 +4,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Usuarios</title>
+    <title>Formulario de Usuario</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="../js/scripts.js"></script>
 </head>
 
 <body>
-    <div class="container mt-5">
-        <!-- Encabezado con icono -->
-        <div class="d-flex align-items-center justify-content-center mb-4" style="height: 40px;">
-            <img src="../Elementos Sitio iStrategy/LOGO-iSTRATEGY-.png" alt="Logo">
-        </div>
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2><i class="fas fa-users"></i> Gestión de Usuarios</h2>
-        </div>
-
-        <!-- Formulario dentro de una tarjeta -->
-        <div class="card shadow-sm mb-4">
-            <div class="card-header bg-primary text-white">
-                <h4>Formulario de Usuario</h4>
-            </div>
-            <div class="card-body">
-                <form id="userForm">
-                    <input type="hidden" id="id" name="id">
-                    <div class="form-group">
-                        <label for="nombre_usuario">Nombre de Usuario</label>
-                        <input type="text" id="nombre_usuario" name="nombre_usuario" class="form-control"
-                            placeholder="Nombre de Usuario" required>
+    <div class="container-fluid">
+        <div class="row no-gutters">
+            <div class="col-md-6 d-flex align-items-center justify-content-center right-background">
+                <div class="card shadow-sm" id="login-container" style="background-color: #E0E0E0;">
+                    <div class="d-flex align-items-center justify-content-center mb-4">
+                        <img src="../Elementos Sitio iStrategy/LOGO-iSTRATEGY-.png" class="img-icon" alt="Logo">
                     </div>
-                    <div class="form-group">
-                        <label for="contrasena">Contraseña</label>
-                        <input type="password" id="contrasena" name="contrasena" class="form-control"
-                            placeholder="Contraseña" required>
+                    <h2 class="text-center">Formulario de Usuario</h2>
+                    <div class="card-body">
+                        <form id="userForm">
+                            <input type="hidden" id="id" name="id">
+                            <div class="form-group">
+                                <label for="nombre_usuario">Nombre de Usuario</label>
+                                <input type="text" id="nombre_usuario" name="nombre_usuario" class="form-control"
+                                    placeholder="Nombre de Usuario" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contrasena">Contraseña</label>
+                                <input type="password" id="contrasena" name="contrasena" class="form-control"
+                                    placeholder="Contraseña" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" id="email" name="email" class="form-control" required>
+                                <!-- <label for="email">Email</label> -->
+                                <!-- <input type="email" id="email" name="email" size="10" class="form-control"
+                                    placeholder="Email" required /> -->
+                            </div>
+                            <div>
+                                <select class="form-select form-select-sm" aria-label=".form-select-sm example"
+                                    name="status">
+                                    <option selected>Status</option>
+                                    <option value="0">Inactivo</option>
+                                    <option value="1">Activo</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="answer">Palabra clave</label>
+                                <input type="answer" id="answer" name="answer" class="form-control"
+                                    placeholder="Palabra clave" required />
+                            </div>
+                            <button type="submit" class="btn btn-dark btn-block">Guardar Usuario</button>
+                        </form>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Guardar Usuario</button>
-                </form>
+                    <div class="d-flex justify-content-between">
+                        <a href="usuarios.html" class="btn btn-danger">Volver a la Lista</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex align-items-center justify-content-center  left-background">
+
             </div>
         </div>
-
-        <!-- Lista de usuarios -->
-        <div id="usersList"></div>
     </div>
 
-    <!-- Modal de Mensaje -->
     <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -65,11 +87,19 @@
         </div>
     </div>
 
-    <!-- Scripts de Bootstrap y jQuery -->
+    <script>
+        $(document).ready(function () {
+            const session = JSON.parse(localStorage.getItem('loggedIn'));
+
+            if (!session) {
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="../js/scripts.js"></script>
 </body>
 
 </html>

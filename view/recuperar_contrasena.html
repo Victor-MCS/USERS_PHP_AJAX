@@ -6,13 +6,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recuperar Contraseña</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 400px;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #138496;
+            border-color: #138496;
+        }
+    </style>
 </head>
 
 <body>
     <div class="container">
-        <h2 class="mt-4">Recuperar Contraseña</h2>
+        <h2>Recuperar Contraseña</h2>
         <div id="preguntas-container">
-            <form id="forgotUserForm" class="mb-4">
+            <form id="forgotUserForm">
                 <div class="form-group">
                     <label for="nombre_usuario">Nombre de Usuario</label>
                     <input type="text" id="nombre_usuario" name="nombre_usuario" class="form-control"

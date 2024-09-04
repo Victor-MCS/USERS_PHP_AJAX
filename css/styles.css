@@ -13,6 +13,27 @@ body {
     height: 100vh;
 }
 
+.body-usuarios {
+    background-image: url('../Elementos Sitio iStrategy/back.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.listUsuarios{
+    /* color: #fff; */
+    padding: 20px;
+    /* border: 1px solid #000000; */
+    background-color: #334659;
+    border-radius: 10px;
+    opacity: 1;
+}
+
 .container-fluid {
     height: 100vh;
     padding: 0;
@@ -46,7 +67,6 @@ body {
     padding: 20px;
     border: 10px solid #ddd;
     box-shadow: 0 0 10px #ddd;
-    /* background-color: #fff; */
 }
 
 .img-icon {
@@ -74,4 +94,8 @@ h2 {
 .forgot_pass{
     padding: 20px;
     border: 10px solid #ddd;
+}
+
+.text-white {
+    color: white;
 }

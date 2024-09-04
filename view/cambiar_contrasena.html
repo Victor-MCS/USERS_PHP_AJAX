@@ -8,22 +8,24 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-<body>
-    <div class="container">
-        <h2 class="mt-4">Cambiar Contraseña</h2>
-        <form id="changePasswordForm" class="mb-4">
-            <div class="form-group">
-                <label for="new_password">Nueva Contraseña</label>
-                <input type="password" id="new_password" name="new_password" class="form-control"
-                    placeholder="Nueva Contraseña" required>
-            </div>
-            <div class="form-group">
-                <label for="confirm_password">Confirmar Nueva Contraseña</label>
-                <input type="password" id="confirm_password" name="confirm_password" class="form-control"
-                    placeholder="Confirmar Contraseña" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Actualizar Contraseña</button>
-        </form>
+<body class="d-flex justify-content-center align-items-center bg-light" style="height: 100vh;">
+    <div class="card shadow-sm p-4" style="width: 100%; max-width: 400px;">
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">Cambiar Contraseña</h2>
+            <form id="changePasswordForm">
+                <div class="form-group">
+                    <label for="new_password">Nueva Contraseña</label>
+                    <input type="password" id="new_password" name="new_password" class="form-control"
+                        placeholder="Nueva Contraseña" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Confirmar Nueva Contraseña</label>
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-control"
+                        placeholder="Confirmar Contraseña" required>
+                </div>
+                <button type="submit" class="btn btn-info btn-block mt-3">Actualizar Contraseña</button>
+            </form>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -46,8 +48,8 @@
                     type: 'POST',
                     data: { nombre_usuario: username, nueva_contrasena: newPassword },
                     success: function (response) {
-                        alert(response);
                         if (response === 'success') {
+                            alert('Contraseña actualizada con éxito.');
                             window.location.href = 'login.html';
                         } else {
                             alert('Error al actualizar la contraseña. Intenta de nuevo.');

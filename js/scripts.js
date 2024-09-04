@@ -1,6 +1,22 @@
 $(document).ready(function () {
+    localStorage.removeItem("loggedIn");
+
+    // Logica de login con bloqueo al 3 intento de inicio de sesión incorrecto
     $('#loginForm').on('submit', function (e) {
         e.preventDefault();
+
+        const maxAttempts = 3;
+        let attempts = parseInt(localStorage.getItem('loginAttempts')) || 0;
+        const lockoutDuration = 10 * 1000;
+
+        const lockoutEnd = localStorage.getItem('lockoutEnd');
+        if (lockoutEnd && new Date() < new Date(lockoutEnd)) {
+            const remainingTime = Math.ceil((new Date(lockoutEnd) - new Date()) / 1000);
+            $('#messageModalLabel').text('Bloqueo de sesión');
+            $('#messageModalBody').text('Demasiados intentos fallidos. Inténtalo de nuevo en ' + remainingTime + ' segundos.');
+            $('#messageModal').modal('show');
+            return;
+        }
 
         $('#messageModalLabel').text('Iniciando sesión');
         $('#messageModalBody').text('Por favor, espera mientras verificamos tus credenciales...');
@@ -13,14 +29,26 @@ $(document).ready(function () {
             success: function (response) {
                 if (response === 'success') {
                     $('#messageModalLabel').text('Inicio de sesión exitoso');
-                    $('#messageModalBody').text('Redirigiendo a la vista CRUD...');
+                    $('#messageModalBody').text('Redirigiendo a la vista Usuarios');
                     localStorage.setItem('loggedIn', 'true');
+                    localStorage.removeItem('loginAttempts');
                     setTimeout(function () {
-                        window.location.href = 'crud.html';
+                        window.location.href = 'usuarios.html';
                     }, 2000);
                 } else {
-                    $('#messageModalLabel').text('Credenciales incorrectas');
-                    $('#messageModalBody').text('El nombre de usuario o la contraseña no son correctos.');
+                    attempts++;
+                    localStorage.setItem('loginAttempts', attempts);
+
+                    if (attempts >= maxAttempts) {
+                        const lockoutEnd = new Date(new Date().getTime() + lockoutDuration);
+                        localStorage.setItem('lockoutEnd', lockoutEnd);
+
+                        $('#messageModalLabel').text('Demasiados intentos fallidos');
+                        $('#messageModalBody').text('Has alcanzado el límite de intentos. Inténtalo de nuevo en 10 segundos.');
+                    } else {
+                        $('#messageModalLabel').text('Credenciales incorrectas');
+                        $('#messageModalBody').text('El nombre de usuario o la contraseña no son correctos. Intento ' + attempts + ' de ' + maxAttempts + '.');
+                    }
                 }
             },
             error: function () {
@@ -30,8 +58,7 @@ $(document).ready(function () {
         });
     });
 
-
-    // Cargar usuarios
+    // Logica para la carga de los usuarios, opté por separarlos en activos e inactivos para aplicar borrado logico y fisico
     function loadUsers() {
         $.ajax({
             url: '../obtener_usuarios.php',
@@ -41,19 +68,35 @@ $(document).ready(function () {
                 if (data.error) {
                     alert(data.error);
                 } else {
-                    let html = '<table border="1"><tr><th>ID</th><th>Nombre de Usuario</th><th>Acciones</th></tr>';
+                    let activeUsersHtml = '<table class="table table-striped text-white"><thead><tr><th>ID</th><th>Nombre de Usuario</th><th>Correo</th><th>Status</th><th>Palabra clave</th><th>Acciones</th></tr></thead><tbody>';
+                    let inactiveUsersHtml = '<table class="table table-striped text-white"><thead><tr><th>ID</th><th>Nombre de Usuario</th><th>Correo</th><th>Status</th><th>Palabra clave</th><th>Acciones</th></tr></thead><tbody>';
+
                     data.forEach(user => {
-                        html += `<tr>
+                        let status = user.status == 1 ? "Activo" : "Inactivo";
+                        let userRow = `<tr  class="text-white">
                             <td>${user.id}</td>
                             <td>${user.username}</td>
+                            <td>${user.email}</td>
+                            <td>${status}</td>
+                            <td>${user.answer}</td>
                             <td>
-                                <button onclick="editUser(${user.id})">Editar</button>
-                                <button onclick="deleteUser(${user.id})">Eliminar</button>
+                                <button class="btn btn-info btn-sm" onclick="editUser(${user.id})">Editar</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteUser(${user.id})">Borrado físico</button>
+                                <button class="btn btn-dark btn-sm" onclick="inactiveUser(${user.id})">Borrado o Activado lógico</button>
                             </td>
                         </tr>`;
+                        if (user.status == 1) {
+                            activeUsersHtml += userRow;
+                        } else {
+                            inactiveUsersHtml += userRow;
+                        }
                     });
-                    html += '</table>';
-                    $('#usersList').html(html);
+
+                    activeUsersHtml += '</tbody></table>';
+                    inactiveUsersHtml += '</tbody></table>';
+
+                    $('#activeUsersList').html(activeUsersHtml);
+                    $('#inactiveUsersList').html(inactiveUsersHtml);
                 }
             },
             error: function (xhr, status, error) {
@@ -62,6 +105,7 @@ $(document).ready(function () {
         });
     }
 
+    // Logica para obtención de usuario para despues editarlo
     window.editUser = function (id) {
         $.ajax({
             url: '../obtener_usuario.php',
@@ -73,7 +117,6 @@ $(document).ready(function () {
                     alert(user.error);
                 } else {
                     localStorage.setItem('userToEdit', JSON.stringify(user));
-
                     window.location.href = 'editar_usuario.html';
                 }
             },
@@ -83,6 +126,7 @@ $(document).ready(function () {
         });
     };
 
+    // Logica para agregar usuarios
     $('#userForm').on('submit', function (e) {
         e.preventDefault();
         $.ajax({
@@ -100,6 +144,28 @@ $(document).ready(function () {
         });
     });
 
+
+    // Logica para editar el usuario
+    $('#editUserForm').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: '../editar_usuario.php',
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function (response) {
+                console.log(response)
+                $('#messageModalLabel').text('Edición de usuario exitosa');
+                $('#messageModalBody').text(response);
+                $('#messageModal').modal('show');
+                setTimeout(function () {
+                    window.location.href = 'usuarios.html';
+                }, 2000);
+            }
+        });
+    });
+
+
+    // Logica para recuperación de contraseña
     $('#forgotUserForm').on('submit', function (e) {
         e.preventDefault();
         $.ajax({
@@ -127,20 +193,7 @@ $(document).ready(function () {
     });
 
 
-    $('#editUserForm').on('submit', function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: '../editar_usuario.php',
-            type: 'POST',
-            data: $(this).serialize(),
-            success: function (response) {
-                alert(response);
-                window.location.href = 'crud.html';
-            }
-        });
-    });
-
-
+    // Logica para eliminado fisico
     window.deleteUser = function (id) {
         if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
             $.ajax({
@@ -155,8 +208,23 @@ $(document).ready(function () {
         }
     };
 
+    // Logica para eliminado / activación logica
+    window.inactiveUser = function (id) {
+        if (confirm('¿Estás seguro de que deseas modificar el estatus a este usuario?')) {
+            $.ajax({
+                url: '../desactivar_usuario.php',
+                type: 'POST',
+                data: { id: id },
+                success: function (response) {
+                    alert(response);
+                    loadUsers();
+                }
+            });
+        }
+    };
 
-    if (window.location.pathname.includes('crud.html')) {
+
+    if (window.location.pathname.includes('usuarios.html')) {
         loadUsers();
     }
 });

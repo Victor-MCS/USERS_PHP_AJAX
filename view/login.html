@@ -36,7 +36,7 @@
                             <input type="password" id="contrasena" name="contrasena" class="form-control"
                                 placeholder="Contraseña" required>
                         </div>
-                        <button type="submit" class="btn btn-danger btn-block">Iniciar Sesión</button>
+                        <button type="submit" class="btn btn-dark btn-block">Iniciar Sesión</button>
                     </form>
                     <div class="forgot_pass">
                         <a href="recuperar_contrasena.html">
@@ -66,6 +66,16 @@
         </div>
     </div>
 
+
+    <script>
+        $(document).ready(function () {
+            localStorage.removeItem("loggedIn");
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="../js/scripts.js"></script>
 </body>
 
 </html>
